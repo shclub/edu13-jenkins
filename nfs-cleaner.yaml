@@ -1,0 +1,43 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: nfs-cleaner
+  name: nfs-cleaner
+  namespace: appdu
+spec:
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: nfs-cleaner
+  template:
+    metadata:
+      labels:
+        app: nfs-cleaner
+    spec:
+      containers:
+      - command:
+        - sh
+        - -c
+        - adduser -H -u 1001 mariadb -D && echo The app is running! && sleep 36000
+        image: busybox:1.28
+        imagePullPolicy: IfNotPresent
+        name: nfs-cleaner
+        resources: {}
+        securityContext:
+          capabilities:
+            drop:
+            - MKNOD
+          privileged: true
+          runAsUser: 0
+        volumeMounts:
+        - mountPath: /bitnami/mariadb
+          name: data
+        - mountPath: /board
+          name: board
+      volumes:
+      - name: data
+        nfs:
+          path: /data
+          server: 192.168.1.22
