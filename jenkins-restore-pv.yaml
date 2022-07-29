@@ -11,16 +11,10 @@ metadata:
 spec:
   accessModes:
   - ReadWriteMany
+  storageClassName: standard
   capacity:
     storage: 100Gi
-  claimRef:
-    apiVersion: v1
-    kind: PersistentVolumeClaim
-    name: jenkins-restore-pvc
-    namespace: devops
   nfs:
-    path: /devops/jenkins-200pv/Restore20201013/data/nfs/devops/jenkins-200pv
-    server: 192.168.0.1
+    path: /share_8c0fade2_649f_4ca5_aeaa_8fd57904f8d5/data/nfs/devops/jenkins-200pv
+    server: 172.25.1.162
   persistentVolumeReclaimPolicy: Retain
-status:
-  phase: Bound
